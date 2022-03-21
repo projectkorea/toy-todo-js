@@ -1,10 +1,10 @@
-const toDoForm = document.querySelector(".js-toDoForm"),
-  toDoInput = toDoForm.querySelector("input"),
-  pendingList = document.querySelector(".js-pending"),
-  finishedList = document.querySelector(".js-finished");
+const toDoForm = document.querySelector('.todo-form'),
+  toDoInput = toDoForm.querySelector('input'),
+  pendingList = document.querySelector('.js-pending'),
+  finishedList = document.querySelector('.js-finished');
 
-const PENDING_LS = "pending",
-  FINISHED_LS = "finished";
+const PENDING = 'pending',
+  FINISHED = 'finished';
 
 let pending = [],
   finished = [];
@@ -14,14 +14,14 @@ function moveToDo(event) {
   const li = btn.parentNode;
   const span = btn.nextSibling.innerText;
   let toDoTemps = [];
-  let stringToDos = "";
+  let stringToDos = '';
   if (btn.checked) {
     toDoTemps = pending;
-    stringToDos = PENDING_LS;
+    stringToDos = PENDING;
     pendingList.removeChild(li);
   } else {
     toDoTemps = finished;
-    stringToDos = FINISHED_LS;
+    stringToDos = FINISHED;
     finishedList.removeChild(li);
   }
   const cleanToDos = toDoTemps.filter(function (toDo) {
@@ -31,32 +31,32 @@ function moveToDo(event) {
   });
   toDoTemps = cleanToDos;
   saveToDo(stringToDos, toDoTemps);
-  if (stringToDos === PENDING_LS) {
+  if (stringToDos === PENDING) {
     pending = cleanToDos;
-    paintToDo(FINISHED_LS, span, null);
+    paintToDo(FINISHED, span, null);
   } else {
     finished = cleanToDos;
-    paintToDo(PENDING_LS, span, null);
+    paintToDo(PENDING, span, null);
   }
 }
 
-function saveToDo(LS, todo) {
-  localStorage.setItem(LS, JSON.stringify(todo));
+function saveToDo(list, todo) {
+  localStorage.setItem(list, JSON.stringify(todo));
 }
 
 function deleteToDo(event) {
   const btn = event.target;
   const li = btn.parentNode;
-  const ul = li.parentNode.className.split("-");
+  const ul = li.parentNode.className.split('-');
   let toDoTemps = [];
   let stringToDos = ul[1];
 
-  if (stringToDos === PENDING_LS) {
+  if (stringToDos === PENDING) {
     toDoTemps = pending;
     pendingList.removeChild(li);
   } else {
     toDoTemps = finished;
-    stringToDos = FINISHED_LS;
+    stringToDos = FINISHED;
     finishedList.removeChild(li);
   }
   const cleanToDos = toDoTemps.filter(function (toDo) {
@@ -65,37 +65,37 @@ function deleteToDo(event) {
   console.log(cleanToDos);
   toDoTemps = cleanToDos;
   saveToDo(stringToDos, toDoTemps);
-  if (stringToDos === PENDING_LS) {
+  if (stringToDos === PENDING) {
     pending = cleanToDos;
   } else {
     finished = cleanToDos;
   }
 }
 
-function paintToDo(LS, text, id) {
-  const li = document.createElement("li"),
-    delBtn = document.createElement("button"),
-    checkbox = document.createElement("input"),
-    span = document.createElement("span");
+function paintToDo(list, text, id) {
+  const li = document.createElement('li'),
+    delBtn = document.createElement('button'),
+    checkbox = document.createElement('input'),
+    span = document.createElement('span');
   let toDoTemps = [],
     toDoListTemps = [];
 
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.setAttribute("class", "btn-chk");
+  checkbox.setAttribute('type', 'checkbox');
+  checkbox.setAttribute('class', 'btn-chk');
 
-  if (LS === PENDING_LS) {
+  if (list === PENDING) {
     toDoTemps = pending;
     toDoListTemps = pendingList;
   } else {
-    span.style.textDecoration = "line-through";
-    checkbox.setAttribute("checked", true);
+    span.style.textDecoration = 'line-through';
+    checkbox.setAttribute('checked', true);
     toDoTemps = finished;
     toDoListTemps = finishedList;
   }
-  delBtn.setAttribute("class", "btn-del");
-  delBtn.innerText = "✖";
-  delBtn.addEventListener("click", deleteToDo);
-  checkbox.addEventListener("change", moveToDo);
+  delBtn.setAttribute('class', 'btn-del');
+  delBtn.innerText = '✖';
+  delBtn.addEventListener('click', deleteToDo);
+  checkbox.addEventListener('change', moveToDo);
   span.innerText = text;
   li.appendChild(checkbox);
   li.appendChild(span);
@@ -109,37 +109,35 @@ function paintToDo(LS, text, id) {
     id: newId,
   };
   toDoTemps.push(toDoObj);
-  saveToDo(LS, toDoTemps);
+  saveToDo(list, toDoTemps);
 }
 
 function handleSubmit(event) {
   event.preventDefault();
   const currentValue = toDoInput.value;
-  paintToDo(PENDING_LS, currentValue, null);
-  toDoInput.value = "";
+  paintToDo(PENDING, currentValue, null);
+  toDoInput.value = '';
 }
 
 function loadToDo() {
-  const loadedPending = localStorage.getItem(PENDING_LS);
-  const loadedFinished = localStorage.getItem(FINISHED_LS);
+  const loadedPending = localStorage.getItem(PENDING);
+  const loadedFinished = localStorage.getItem(FINISHED);
 
   if (loadedPending !== null) {
     const parsedtoDo = JSON.parse(loadedPending);
     parsedtoDo.forEach(function (toDo) {
-      paintToDo(PENDING_LS, toDo.text, toDo.id);
+      paintToDo(PENDING, toDo.text, toDo.id);
     });
   }
   if (loadedFinished !== null) {
     const parsedFinished = JSON.parse(loadedFinished);
     parsedFinished.forEach(function (toDo) {
-      paintToDo(FINISHED_LS, toDo.text, toDo.id);
+      paintToDo(FINISHED, toDo.text, toDo.id);
     });
   }
 }
 
-function init() {
+export function toDoInit() {
   loadToDo();
-  toDoForm.addEventListener("submit", handleSubmit);
+  toDoForm.addEventListener('submit', handleSubmit);
 }
-
-init();

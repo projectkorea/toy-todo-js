@@ -1,43 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Mission Today</title>
-        <link rel="stylesheet" href="index.css" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-        />
-        <meta charset="utf-8" />
-    </head>
-    <body>
-        <div class="js-clock">
-            <h1 class="clockTitle">00:00</h1>
-        </div>
-        <form class="js-form form">
-            <input type="text" placeholder="What is yur name?" />
-        </form>
+  <head>
+    <title>오늘의 할 일</title>
+    <link rel="stylesheet" href="index.css" />
+    <meta charset="utf-8" />
+    <script type="module" src="index.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="js-clock">
+        <h1 class="clock">00:00</h1>
+      </div>
+    </header>
+    <main>
+      <div class="todo-header">
         <h1>What is your purpose?</h1>
-        <select>
-            <option value="">--- Choose Your purpose ---</option>
-            <option value="KR">Coding Study</option>
-            <option value="GR">Psyche Study</option>
-            <option value="TR">Surfing</option>
-        </select>
-
-        <h4 class="js-greetings greetings"></h4>
-
-        <form class="js-toDoForm">
-            <input type="text" placeholder="What's your Mission?" />
+      </div>
+      <div class="todo-main">
+        <form class="todo-form">
+          <input class="todo-input" type="text" placeholder="딱 말해" />
         </form>
-        <h2>· Pending📖</h2>
-        <ul class="js-pending"></ul>
-        <h2>· Finished📕</h2>
-        <ul class="js-finished"></ul>
-        <span class="js-weather"></span>
-        <script src="./js/greeting.js"></script>
-        <script src="./js/todo.js"></script>
-        <script src="./js/bg.js"></script>
-        <script src="./js/weather.js"></script>
-        <script src="./js/clock.js"></script>
-    </body>
+        <div class="todo-view">
+          <div class="todo-view-pending">
+            <h2>· 할 것📖</h2>
+            <ul class="todo-pending"></ul>
+          </div>
+          <div class="todo-view-finished">
+            <h2>· 끝낸 것📕</h2>
+            <ul class="todo-finished"></ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>
