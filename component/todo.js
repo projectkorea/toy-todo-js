@@ -1,7 +1,7 @@
 const toDoForm = document.querySelector('.todo-form'),
-  toDoInput = toDoForm.querySelector('input'),
-  pendingList = document.querySelector('.js-pending'),
-  finishedList = document.querySelector('.js-finished');
+  toDoInput = toDoForm.querySelector('.todo-input'),
+  pendingList = document.querySelector('.todo-pending'),
+  finishedList = document.querySelector('.todo-finished');
 
 const PENDING = 'pending',
   FINISHED = 'finished';
@@ -9,12 +9,14 @@ const PENDING = 'pending',
 let pending = [],
   finished = [];
 
-function moveToDo(event) {
-  const btn = event.target;
+function moveToDo(e) {
+  const btn = e.target;
   const li = btn.parentNode;
   const span = btn.nextSibling.innerText;
+
   let toDoTemps = [];
   let stringToDos = '';
+
   if (btn.checked) {
     toDoTemps = pending;
     stringToDos = PENDING;
@@ -24,12 +26,15 @@ function moveToDo(event) {
     stringToDos = FINISHED;
     finishedList.removeChild(li);
   }
+
   const cleanToDos = toDoTemps.filter(function (toDo) {
     return toDo.id !== parseInt(li.id);
     //삭제한 리스트의 아이디만 빼고 cleanToDos에 넣는 과정
     // 삭제한 게 3이면 1 !==3 true 1리턴, 2 !==3? true 리턴 3!==3 false 3리턴x
   });
+
   toDoTemps = cleanToDos;
+
   saveToDo(stringToDos, toDoTemps);
   if (stringToDos === PENDING) {
     pending = cleanToDos;
@@ -40,12 +45,12 @@ function moveToDo(event) {
   }
 }
 
-function saveToDo(list, todo) {
-  localStorage.setItem(list, JSON.stringify(todo));
+function saveToDo(listName, newList) {
+  localStorage.setItem(listName, JSON.stringify(newList));
 }
 
-function deleteToDo(event) {
-  const btn = event.target;
+function deleteToDo(e) {
+  const btn = e.target;
   const li = btn.parentNode;
   const ul = li.parentNode.className.split('-');
   let toDoTemps = [];
@@ -74,31 +79,33 @@ function deleteToDo(event) {
 
 function paintToDo(list, text, id) {
   const li = document.createElement('li'),
+    content = document.createElement('content'),
     delBtn = document.createElement('button'),
-    checkbox = document.createElement('input'),
-    span = document.createElement('span');
+    checkbox = document.createElement('input');
+
   let toDoTemps = [],
     toDoListTemps = [];
 
   checkbox.setAttribute('type', 'checkbox');
-  checkbox.setAttribute('class', 'btn-chk');
+  checkbox.setAttribute('class', 'btn-check');
 
   if (list === PENDING) {
     toDoTemps = pending;
     toDoListTemps = pendingList;
   } else {
-    span.style.textDecoration = 'line-through';
+    content.style.textDecoration = 'line-through';
     checkbox.setAttribute('checked', true);
     toDoTemps = finished;
     toDoListTemps = finishedList;
   }
+
   delBtn.setAttribute('class', 'btn-del');
-  delBtn.innerText = '✖';
+  delBtn.innerText = 'DEL';
   delBtn.addEventListener('click', deleteToDo);
   checkbox.addEventListener('change', moveToDo);
-  span.innerText = text;
+  content.innerText = text;
   li.appendChild(checkbox);
-  li.appendChild(span);
+  li.appendChild(content);
   li.appendChild(delBtn);
 
   const newId = id === null ? toDoTemps.length + 1 : id;
@@ -112,32 +119,28 @@ function paintToDo(list, text, id) {
   saveToDo(list, toDoTemps);
 }
 
-function handleSubmit(event) {
-  event.preventDefault();
-  const currentValue = toDoInput.value;
-  paintToDo(PENDING, currentValue, null);
+function handleSubmit(e) {
+  e.preventDefault();
+  const value = e.target['todo-input']['value'];
+  paintToDo(PENDING, value, null);
   toDoInput.value = '';
 }
 
-function loadToDo() {
+function loadToDoList() {
   const loadedPending = localStorage.getItem(PENDING);
   const loadedFinished = localStorage.getItem(FINISHED);
 
   if (loadedPending !== null) {
-    const parsedtoDo = JSON.parse(loadedPending);
-    parsedtoDo.forEach(function (toDo) {
-      paintToDo(PENDING, toDo.text, toDo.id);
-    });
+    const parsedPending = JSON.parse(loadedPending);
+    parsedPending.forEach((toDo) => paintToDo(PENDING, toDo.text, toDo.id));
   }
   if (loadedFinished !== null) {
     const parsedFinished = JSON.parse(loadedFinished);
-    parsedFinished.forEach(function (toDo) {
-      paintToDo(FINISHED, toDo.text, toDo.id);
-    });
+    parsedFinished.forEach((toDo) => paintToDo(FINISHED, toDo.text, toDo.id));
   }
 }
 
 export function toDoInit() {
-  loadToDo();
+  loadToDoList();
   toDoForm.addEventListener('submit', handleSubmit);
 }
