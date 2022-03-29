@@ -4,38 +4,22 @@
     <title>오늘의 할 일</title>
     <link rel="stylesheet" href="index.css" />
     <meta charset="utf-8" />
-    <script type="module" src="index.js"></script>
+    <script defer src="todo.js"/></script>
   </head>
   <body>
-    <header>
-      <div class="js-clock">
-        <h1 class="clock">00:00</h1>
+    <h1 class="todo-header">What is your purpose?</h1>  
+    <form class="todo-form">
+      <input name="todo-input" class="todo-input" />
+    </form>
+    <div class="todo-view">
+      <div class="todo-view-pending">
+        <h2>할 것📖</h2>
+        <ul class="todo-pending"></ul>
       </div>
-    </header>
-    <main>
-      <div class="todo-header">
-        <h1>What is your purpose?</h1>
+      <div class="todo-view-finished">
+        <h2>끝낸 것📕</h2>
+        <ul class="todo-finished"></ul>
       </div>
-      <div class="todo-main">
-        <form class="todo-form">
-          <input
-            name="todo-input"
-            class="todo-input"
-            type="text"
-            placeholder="딱 말해"
-          />
-        </form>
-        <div class="todo-view">
-          <div class="todo-view-pending">
-            <h2>할 것📖</h2>
-            <ul class="todo-pending"></ul>
-          </div>
-          <div class="todo-view-finished">
-            <h2>끝낸 것📕</h2>
-            <ul class="todo-finished"></ul>
-          </div>
-        </div>
-      </div>
-    </main>
+    </div>
   </body>
 </html>

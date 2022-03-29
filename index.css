@@ -9,15 +9,10 @@ body {
 }
 
 .todo-header {
-  margin: 10px;
+  display: block;
+  margin: 30px;
   display: flex;
   justify-content: center;
-  color: whitesmoke;
-}
-
-.js-clock h1 {
-  font-size: 120px;
-  margin: 10px;
   color: whitesmoke;
 }
 

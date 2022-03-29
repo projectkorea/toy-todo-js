@@ -140,7 +140,9 @@ function loadToDoList() {
   }
 }
 
-export function toDoInit() {
+function toDoInit() {
   loadToDoList();
   toDoForm.addEventListener('submit', handleSubmit);
 }
+
+toDoInit();
