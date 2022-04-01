@@ -57,10 +57,10 @@ const moveToDo = (e) => {
 
   if (listName === 'pending') {
     pending = cleanToDos;
-    paintToDo('finshed', text, null);
+    paintToDo('finished', text, null);
   } else {
     finished = cleanToDos;
-    paintToDo('pending, text, null');
+    paintToDo('pending', text, null);
   }
 };
 
