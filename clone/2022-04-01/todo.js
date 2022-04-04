@@ -8,61 +8,54 @@ const FINISHED = 'finished';
 let pending_global = [];
 let finished_global = [];
 
+const getUpdatedTodo = (listName, li) => {
+  let toDos =
+    listName === PENDING //
+      ? pending_global
+      : finished_global;
+  const newToDo = toDos.filter((toDo) => toDo.id !== parseInt(li.id));
+  return newToDo;
+};
+
+const removeDOM = (listName, li) => {
+  if (listName === PENDING) {
+    $pendingList.removeChild(li);
+  } else {
+    $finishedList.removeChild(li);
+  }
+};
+
 const deleteToDo = (e) => {
   const li = e.target.parentNode;
   const ul = li.parentNode.className.split('-');
   const listName = ul[0];
+  const newToDo = getUpdatedTodo(listName, li);
 
-  let toDoTemps = [];
+  removeDOM(listName, li);
+  saveToDo(listName, newToDo);
 
-  if (listName === PENDING) {
-    toDoTemps = pending_global;
-    $pendingList.removeChild(li);
-  } else {
-    toDoTemps = finished_global;
-    $finishedList.removeChild(li);
-  }
-  const cleanToDos = toDoTemps.filter((toDo) => toDo.id !== parseInt(li.id));
-  toDoTemps = cleanToDos;
-  saveToDo(listName, toDoTemps);
-
-  if (listName === PENDING) {
-    pending_global = cleanToDos;
-  } else {
-    finished_global = cleanToDos;
-  }
+  listName === PENDING
+    ? (pending_global = newToDo)
+    : (finished_global = newToDo);
 };
 
 const moveToDo = (e) => {
   const isChecked = e.target.checked;
   const li = e.target.parentNode;
-  const text = e.target.nextSibling.innerText;
+  const text = e.target.nextSibling.textContent;
 
-  let toDoTemps = [];
-  let listName = '';
+  const listName = isChecked ? PENDING : FINISHED;
+  const newToDo = getUpdatedTodo(listName, li);
 
-  if (isChecked) {
-    toDoTemps = pending_global;
-    listName = PENDING;
-    $pendingList.removeChild(li);
-  } else {
-    toDoTemps = finished_global;
-    listName = FINISHED;
-    $finishedList.removeChild(li);
-  }
-
-  const cleanToDos = toDoTemps.filter((toDo) => toDo.id !== parseInt(li.id));
-
-  toDoTemps = cleanToDos;
-
-  saveToDo(listName, toDoTemps);
+  removeDOM(listName, li);
+  saveToDo(listName, newToDo);
 
   if (listName === PENDING) {
-    pending_global = cleanToDos;
-    paintToDo(FINISHED, text, null);
+    pending_global = newToDo;
+    paintToDo(FINISHED, null, text);
   } else {
-    finished_global = cleanToDos;
-    paintToDo(PENDING, text, null);
+    finished_global = newToDo;
+    paintToDo(PENDING, null, text);
   }
 };
 
@@ -70,7 +63,7 @@ const saveToDo = (listName, newList) => {
   localStorage.setItem(listName, JSON.stringify(newList));
 };
 
-const paintToDo = (listName, text, id) => {
+const paintToDo = (listName, id, text) => {
   const li = ToDoList(listName, text);
   let toDoTemps = [];
   let toDoList = [];
@@ -88,8 +81,8 @@ const paintToDo = (listName, text, id) => {
   toDoList.appendChild(li);
 
   const newToDo = {
-    text,
     id: newId,
+    text,
   };
 
   toDoTemps.push(newToDo);
@@ -100,9 +93,10 @@ const ToDoList = (listName, text) => {
   const li = document.createElement('li');
   const delBtn = document.createElement('button');
   const checkBox = document.createElement('input');
+  const textNode = document.createTextNode(text);
 
   checkBox.setAttribute('type', 'checkbox');
-  checkBox.setAttribute('class', 'btn-check');
+  checkBox.classList.add('btn-check');
   checkBox.addEventListener('change', moveToDo);
   listName === FINISHED && checkBox.setAttribute('checked', true);
 
@@ -110,9 +104,8 @@ const ToDoList = (listName, text) => {
   delBtn.innerText = 'DEL';
   delBtn.addEventListener('click', deleteToDo);
 
-  console.log(text);
-  li.innerText = text;
   li.appendChild(checkBox);
+  li.appendChild(textNode);
   li.appendChild(delBtn);
   $pendingList.appendChild(li);
   return li;
@@ -138,7 +131,7 @@ const toDoInit = () => {
     e.preventDefault();
     const value = e.target['todo-input'].value;
     e.target['todo-input'].value = '';
-    paintToDo(PENDING, value, null);
+    paintToDo(PENDING, null, value);
   };
   loadToDo();
   $toDoForm.addEventListener('submit', handleSubmit);
