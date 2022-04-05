@@ -8,12 +8,12 @@ const FINISHED = 'finished';
 let pending_global = [];
 let finished_global = [];
 
-const getUpdatedTodo = (listName, li) => {
+const filteredTodo = (listName, li) => {
   let toDos =
     listName === PENDING //
       ? pending_global
       : finished_global;
-  const newToDo = toDos.filter((toDo) => toDo.id !== parseInt(li.id));
+  const newToDo = toDos.filter((toDo) => toDo.id !== li.id);
   return newToDo;
 };
 
@@ -27,11 +27,11 @@ const removeDOM = (listName, li) => {
 
 const deleteToDo = (e) => {
   const li = e.target.parentNode;
-  const ul = li.parentNode.className.split('-');
-  const listName = ul[0];
-  const newToDo = getUpdatedTodo(listName, li);
+  const listName = li.parentNode.className.split('-')[0];
+  const newToDo = filteredTodo(listName, li);
 
   removeDOM(listName, li);
+  console.log(newToDo);
   saveToDo(listName, newToDo);
 
   listName === PENDING
@@ -45,17 +45,17 @@ const moveToDo = (e) => {
   const text = e.target.nextSibling.textContent;
 
   const listName = isChecked ? PENDING : FINISHED;
-  const newToDo = getUpdatedTodo(listName, li);
+  const newToDo = filteredTodo(listName, li);
 
   removeDOM(listName, li);
   saveToDo(listName, newToDo);
 
   if (listName === PENDING) {
     pending_global = newToDo;
-    paintToDo(FINISHED, null, text);
+    paintToDo(FINISHED, li.id, text);
   } else {
     finished_global = newToDo;
-    paintToDo(PENDING, null, text);
+    paintToDo(PENDING, li.id, text);
   }
 };
 
@@ -76,7 +76,7 @@ const paintToDo = (listName, id, text) => {
     toDoList = $finishedList;
   }
 
-  const newId = id === null ? toDoTemps.length + 1 : id;
+  const newId = id === null ? Math.random().toString(16).slice(2, 10) : id;
   li.id = newId;
   toDoList.appendChild(li);
 
@@ -117,12 +117,12 @@ const loadToDo = () => {
 
   if (loadedPending) {
     const parsedPending = JSON.parse(loadedPending);
-    parsedPending.forEach((toDo) => paintToDo(PENDING, toDo.id, toDo.item));
+    parsedPending.forEach((toDo) => paintToDo(PENDING, toDo.id, toDo.text));
   }
 
   if (loadedFinished) {
     const parsedFinished = JSON.parse(loadedFinished);
-    parsedFinished.forEach((toDo) => paintToDo(FINISHED, toDo.id, toDo.item));
+    parsedFinished.forEach((toDo) => paintToDo(FINISHED, toDo.id, toDo.text));
   }
 };
 
