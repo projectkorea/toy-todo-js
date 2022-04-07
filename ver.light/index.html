@@ -4,25 +4,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>To Do App</title>
     <script defer src="todo.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="todo-container">
-      <h1>Todo-App</h1>
+      <h1 class="todo-header">To Do App</h1>
       <form class="todo-form">
-        <input class="todo-input" name="todo-input" />
-        <input class="todo-submit" type="submit" value="등록" />
+        <input class="todo-input" />
+        <input type="submit" class="todo-submit" />
       </form>
       <div class="todo-view">
-        <div class="todo-view-pending">
-          <h2>Pending</h2>
-          <ul class="pending-list"></ul>
-        </div>
-        <div class="todo-view-finished">
-          <h2>Finished</h2>
-          <ul class="finished-list"></ul>
+        <ul class="todo-list"></ul>
+        <div class="todo-progress">
+          <progress class="progress-bar" value="0" max="100"></progress>
+          <div class="progress-per">0 %</div>
         </div>
       </div>
     </div>

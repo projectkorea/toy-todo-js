@@ -17,28 +17,6 @@ const filteredTodo = (listName, li) => {
   return newToDo;
 };
 
-const removeDOM = (listName, li) => {
-  if (listName === PENDING) {
-    $pendingList.removeChild(li);
-  } else {
-    $finishedList.removeChild(li);
-  }
-};
-
-const deleteToDo = (e) => {
-  const li = e.target.parentNode;
-  const listName = li.parentNode.className.split('-')[0];
-  const newToDo = filteredTodo(listName, li);
-
-  removeDOM(listName, li);
-  console.log(newToDo);
-  saveToDo(listName, newToDo);
-
-  listName === PENDING
-    ? (pending_global = newToDo)
-    : (finished_global = newToDo);
-};
-
 const moveToDo = (e) => {
   const isChecked = e.target.checked;
   const li = e.target.parentNode;
@@ -57,6 +35,27 @@ const moveToDo = (e) => {
     finished_global = newToDo;
     paintToDo(PENDING, li.id, text);
   }
+};
+
+const removeDOM = (listName, li) => {
+  if (listName === PENDING) {
+    $pendingList.removeChild(li);
+  } else {
+    $finishedList.removeChild(li);
+  }
+};
+
+const deleteToDo = (e) => {
+  const li = e.target.parentNode;
+  const listName = li.parentNode.className.split('-')[0];
+  const newToDo = filteredTodo(listName, li);
+
+  removeDOM(listName, li);
+  saveToDo(listName, newToDo);
+
+  listName === PENDING
+    ? (pending_global = newToDo)
+    : (finished_global = newToDo);
 };
 
 const saveToDo = (listName, newList) => {
@@ -98,7 +97,9 @@ const ToDoList = (listName, text) => {
   checkBox.setAttribute('type', 'checkbox');
   checkBox.classList.add('btn-check');
   checkBox.addEventListener('change', moveToDo);
+
   listName === FINISHED && checkBox.setAttribute('checked', true);
+  listName === FINISHED && li.classList.add('completed');
 
   delBtn.setAttribute('class', 'btn-del');
   delBtn.innerText = 'DEL';

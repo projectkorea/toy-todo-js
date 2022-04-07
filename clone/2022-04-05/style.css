@@ -71,7 +71,7 @@ input {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.btn-check {
+.todo-checkbox {
   position: absolute;
   top: 3px;
   left: 5px;
@@ -80,11 +80,11 @@ input {
   background-color: #2eb2ff;
 }
 
-.btn-check:checked {
+.todo-check:checked {
   content: '✔';
 }
 
-.btn-del {
+.todo-delete {
   position: absolute;
   top: 5px;
   right: 5px;
