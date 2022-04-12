@@ -4,22 +4,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To Do App</title>
+    <title>to do app</title>
     <script defer src="todo.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="todo-container">
+    <todo class="todo-container">
       <h1 class="todo-title">To Do App</h1>
       <form class="todo-form">
-        <input name="todo-input" class="todo-input" />
-        <input value="추가" type="submit" class="todo-submit" />
+        <input name="todo-input" type="text" class="todo-input" />
+        <input type="submit" class="todo-submit" />
       </form>
       <ul class="todo-list"></ul>
       <div class="todo-progress">
-        <progress class="progress-bar" value="0" max="100"></progress>
-        <div class="progress-per">0 %</div>
+        <progress class="progress-bar" max="100" value="0"></progress>
+        <div class="progress-per">0%</div>
       </div>
-    </div>
+    </todo>
   </body>
 </html>

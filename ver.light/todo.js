@@ -1,102 +1,83 @@
-const setTDos = (newTodos) => {
-  todos = newTodos;
-};
+const $toDoList = document.querySelector('.todo-list');
 
-const getTodos = () => {
-  return todos;
-};
-
-const add_todo = () => {
-  const newId = id++;
-  const todoInputElem = document.getElementById('todo-input');
-  const newTodos = [
-    ...getTodos(),
-    { id: newId, content: todoInputElem.value, isCompleted: false },
-  ];
-  todoInputElem.value = '';
-  setTodos(newTodos);
-  paintTodos();
+const deleteToDo = (e) => {
+  const li = e.target.parentNode;
+  $toDoList.removeChild(li);
   calcRate();
 };
 
-const delete_todo = (todoId) => {
-  new_todos = todos.filter((todo) => todo.id !== todoId);
-  setTodos(new_todos);
-  paintTodos();
-  calcRate();
-};
-
-const complete_todo = (todoId) => {
-  new_todos = todos.map((todo) =>
-    todo.id === todoId
-      ? { id: todo.id, content: todo.content, isCompleted: !todo.isCompleted }
-      : todo
+const checkToDo = (e) => {
+  const completed = Object.values(e.target.parentNode.classList).includes(
+    'checked'
   );
-  setTodos(new_todos);
-  paintTodos();
+  completed
+    ? e.target.parentNode.classList.remove('checked')
+    : e.target.parentNode.classList.add('checked');
+
   calcRate();
 };
 
-const ToDoList = () => {};
+const ToDoItem = (id, text) => {
+  const li = document.createElement('li');
+  const delBtn = document.createElement('button');
+  const checkBox = document.createElement('input');
+  const textNode = document.createTextNode(text);
 
-const paintTodos = () => {
-  const todoListElem = document.getElementById('todo-list');
-  todoListElem.innerHTML = null;
+  checkBox.classList.add('todo-checkbox');
+  checkBox.setAttribute('type', 'checkbox');
+  checkBox.addEventListener('change', checkToDo);
 
-  todos.forEach((todo) => {
-    const todoItemElem = document.createElement('li');
-    todoItemElem.classList.add('todo-item');
+  delBtn.classList.add('todo-delete');
+  delBtn.innerText = '❌';
+  delBtn.addEventListener('click', deleteToDo);
 
-    const checkboxElem = document.createElement('div');
-    checkboxElem.classList.add('checkbox');
-    checkboxElem.addEventListener('click', () => {
-      complete_todo(todo.id);
-    });
+  li.id = id;
+  li.classList.add('todo-item');
+  li.appendChild(checkBox);
+  li.appendChild(textNode);
+  li.appendChild(delBtn);
+  return li;
+};
 
-    const todoElem = document.createElement('div');
-    todoElem.classList.add('todo');
-    todoElem.innerText = todo.content;
-
-    const delBtnElem = document.createElement('div');
-    delBtnElem.classList.add('delBtn');
-    delBtnElem.addEventListener('click', () => {
-      delete_todo(todo.id);
-    });
-    delBtnElem.innerText = '❌';
-
-    if (todo.isCompleted) {
-      todoItemElem.classList.add('checked');
-      checkboxElem.innerText = '✅';
-    } else {
-      checkboxElem.innerText = '⬜';
-    }
-
-    todoItemElem.appendChild(checkboxElem);
-    todoItemElem.appendChild(todoElem);
-    todoItemElem.appendChild(delBtnElem);
-
-    todoListElem.appendChild(todoItemElem);
-  });
+const paintToDo = (newId, content) => {
+  const newToDo = ToDoItem(newId, content);
+  $toDoList.appendChild(newToDo);
 };
 
 const calcRate = () => {
-  const total = todos.length;
-  const completedTodos = todos.filter((todo) => todo.isCompleted === true);
-  const completed = completedTodos.length;
+  const children = Array.from($toDoList.children);
+  const total = children.length || 1;
+  const completed = children.filter((item) =>
+    Object.values(item.classList).includes('checked')
+  ).length;
+
   const rate = Math.floor((completed * 100) / total);
 
-  const rateBarElem = document.getElementById('rate-bar');
-  rateBarElem.value = rate;
+  const progressBar = document.querySelector('.progress-bar');
+  progressBar.value = rate;
+  const progressPer = document.querySelector('.progress-per');
+  progressPer.innerText = `${rate} %`;
+};
 
-  const ratePerElem = document.getElementById('rate-per');
-  ratePerElem.innerText = `${rate} %`;
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const content = e.target['todo-input'].value;
+  if (validate(content)) {
+    const newId = Math.random().toString(16).slice(2, 5);
+
+    e.target['todo-input'].value = '';
+    paintToDo(newId, content);
+    calcRate();
+  }
+};
+
+const validate = (content) => {
+  return content || false;
 };
 
 const init = () => {
-  const addBtn = document.getElementById('addBtn');
-  addBtn.addEventListener('click', () => {
-    add_todo();
-  });
+  const todoForm = document.querySelector('.todo-form');
+  todoForm.addEventListener('submit', handleSubmit);
 };
 
 init();
