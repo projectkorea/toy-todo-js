@@ -93,11 +93,9 @@ const paintToDo = (listName, id, text) => {
   const li = ToDoList(listName, text);
   li.id = id;
 
-  if (listName === PENDING) {
-    $pendingList.appendChild(li);
-  } else {
-    $finishedList.appendChild(li);
-  }
+  listName === PENDING
+    ? $pendingList.appendChild(li)
+    : $finishedList.appendChild(li);
 };
 
 const loadToDo = () => {
