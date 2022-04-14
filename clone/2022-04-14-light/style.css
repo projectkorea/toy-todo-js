@@ -1,0 +1,87 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.todo-container {
+  justify-content: center;
+  min-width: 500px;
+  background-color: #aae0ff;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 5px;
+}
+
+.todo-title {
+  text-align: center;
+}
+
+.todo-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+}
+
+.todo-input {
+  width: 400px;
+  height: 30px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.todo-list {
+  padding-left: 0px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.checked {
+  text-decoration: line-through;
+}
+
+.todo-checkbox {
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.todo-delete {
+  float: right;
+  right: 0px;
+  cursor: pointer;
+}
+
+.todo-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+}
+
+.progress-bar {
+  width: 90%;
+  height: 20px;
+  border-radius: 5px;
+}
+
+progress::-webkit-progress-bar {
+  background-color: lightgray;
+  border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+  transition: width 500ms ease-out;
+  background-color: #0066ff;
+  border-radius: 5px;
+}
